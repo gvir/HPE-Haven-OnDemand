@@ -1,0 +1,39 @@
+<project name="Sample usage of Salesforce Ant tasks" default="test" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property file="build.properties"/>
+    <property environment="env"/>
+    <tstamp/>
+
+    <!-- <property name="mydir" value='dev3-${DSTAMP}'/> -->
+    <!-- <property name="mydir" value="code"/> -->
+    <property name="mydate" value='${DSTAMP}'/>
+
+ <!-- dumps -->
+
+    <target name="getCode">
+
+
+	 <sf:retrieve
+		 username="${developer.username}"
+     password="${developer.password}"
+     serverurl="${developer.serverurl}"
+		 retrieveTarget="./src"
+		 unpackaged="package.xml"
+		 pollWaitMillis="10000"
+		 maxPoll="20"/>
+    </target>
+
+<!--  deploys -->
+
+      <target name="deployCode">
+        <sf:deploy
+          username="${developer.username}"
+          password="${developer.password}"
+          serverurl="${developer.serverurl}"
+          deployroot="./src">
+        </sf:deploy>
+      </target>
+
+
+
+</project>
