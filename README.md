@@ -2,7 +2,7 @@
 
 ----
 ## Overview
-This library can be used to consume [HPE Haven OnDemand - https://dev.havenondemand.com/apis](https://dev.havenondemand.com/apis)in Salesforce. 
+This library can be used to consume [HPE Haven OnDemand - https://dev.havenondemand.com/apis](https://dev.havenondemand.com/apis) in Salesforce. 
 
 ----
 ## What is HAVEN ONDEMAND?
