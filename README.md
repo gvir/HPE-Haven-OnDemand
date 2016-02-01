@@ -26,7 +26,7 @@ For a full list of all the APIs and to try them out, check out [https://www.have
 
 ### Using Unmanaged package
 
-- Login in the Salesforce account and install [package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t280000006Wj6).
+- Login in the Salesforce account and install [package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t280000006YVp).
 
 ### Using ANT
 
