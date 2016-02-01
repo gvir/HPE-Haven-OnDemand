@@ -62,10 +62,8 @@ HODClient client = new HODClient(apiKey, version);
 Map<String,object> params = new Map<String,Object>(); 
 // add parameters to be passed
 params.put('index','test');
-// get resposne, it is json response
-String response= client.postRequest(params, HODAPP.INDEX_STATUS, HODClientConstants.REQ_MODE.SYNC);
-// deserialize the response
-Map<String,Object> data = (Map<String,Object>)JSON.deserializeUntyped(response);
+// get response
+Map<String,Object> response= client.postRequest(params, HODAPP.INDEX_STATUS, HODClientConstants.REQ_MODE.SYNC);
 ```
 
 ### Sample post async call (list resources)
@@ -78,23 +76,17 @@ Map<String,object> params = new Map<String,Object>();
 params.put('flavor',new List<String>{'standard','explorer'});
 params.put('type',new List<String>{'content','connector'});
 // get response
-String response= client.postRequest(params, HODApp.LIST_RESOURCES, HODClientConstants.REQ_MODE.ASYNC);
-// deserialize response
-Map<String,Object> data = (Map<String,Object>)JSON.deserializeUntyped(response);
-String jobId = data.get('jobID');
+Map<String,Object> data = client.postRequest(params, HODApp.LIST_RESOURCES, HODClientConstants.REQ_MODE.ASYNC);
+String jobId = data.get(HODClientConstants.JOB_ID);
 
 
 // check job status
 // if it is finished then getJobResult method can be used to get jobResult
-HODClient client = new HODClient(apiKey, version);
-String response= client.getJobStatus(jobID);
-Map<String,Object> data = (Map<String,Object>)JSON.deserializeUntyped(response);
-System.assert(data.get('status') == 'finished');
+Map<String,Object> data = client.getJobStatus(jobID);
+System.assert(data.get(HODClientConstants.JOB_RESPONSE_STATUS) == HODClientConstants.JOB_RESPONSE_FINISHED);
 
 // get job data
-HODClient client = new HODClient(apiKey, version);
-String response= client.getJobResult(jobID);
-Map<String,Object> data = (Map<String,Object>)JSON.deserializeUntyped(response);
+Map<String,Object> data = client.getJobResult(jobID);
 
 ```
 
@@ -109,9 +101,8 @@ params.add(new Multipart('test.pdf',Blob.toPdf('sample value'),'application/pdf'
 // add multipart for other param
 params.add(new Multipart('service_name','test'));
 // call API
-String response= client.postRequestWithAttachment(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
-Map<String,Object> data = (Map<String,Object>)JSON.deserializeUntyped(response);
-String jobId = data.get('jobID');
+Map<String,Object> data  client.postRequestWithAttachment(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
+String jobId = data.get(HODClientConstants.JOB_ID);
 
 ```
 
@@ -131,28 +122,17 @@ try
 catch (HODClientException ex)
 {
      String message = ex.getMessage();
-     Map<String,Object> error = (Map<String,Object>)JSON.deserializeUntyped(message);
-     System.debug(error.error);
-     System.debug(error.reason);
+     System.debug(message);
 }
 
 ```
 ### Parsing Response
 
-- All the class/error return JSON string which can easily be parsed in APEX, below example show parsing CREATE_TEXT_INDEX call respone string (res).
-
+- Method returns Map<String,Object>
 ``` Apex
+// value can be type cast to appropriate class or data structure
+Object value = response.get('key');
 
-// parsing response in a class
-    public class CreateTextIndexResponse {
-        public String message;  // optional
-        public String index;    // optional
-    }
-       
-       CreateTextIndexResponse deserializedRes= JSON.deserialize(res, CreateTextIndexResponse.class);
-
- // parsing response in untyped manner
-  Map<String,Object> data = (Map<String,Object>)JSON.deserializeUntyped(res);
 ```
 
 ### HODClient Instance Methods
@@ -165,10 +145,10 @@ catch (HODClientException ex)
      * @param params params to be passed in query string
      * @param hodApp end point to be called
      * @param mode sync/async
-     * @return string response
+     * @return Map<String,Object> response
      * @throws HODClientException 
      */ 
-    public String postRequest(Map<String,Object> params, String hodApp, HODClientConstants.REQ_Mode mode)
+    public Map<String,Object> postRequest(Map<String,Object> params, String hodApp, HODClientConstants.REQ_Mode mode)
 
 
 ```
@@ -181,10 +161,10 @@ catch (HODClientException ex)
      * @param params params to be passed in post body
      * @param hodApp end point to be called
      * @param mode sync/async
-     * @return string response 
+     * @return Map<String,Object> response 
      * @throws HODClientException
      */ 
-    public String postRequestWithAttachment(List<Multipart> params, String hodApp, HODClientConstants.REQ_Mode mode)
+    public Map<String,Object> postRequestWithAttachment(List<Multipart> params, String hodApp, HODClientConstants.REQ_Mode mode)
 
 
 ```
@@ -196,7 +176,7 @@ catch (HODClientException ex)
      * @param jobId id of the job submitted
      * @throws HODClientException
      */
-    public String getJobStatus(String jobId)
+    public Map<String,Object> getJobStatus(String jobId)
 ```
 
 ``` Apex
@@ -205,5 +185,5 @@ catch (HODClientException ex)
      * @param jobId id of the job submitted
      * @throws HODClientException
      */
-    public String getJobResult(String jobId)
+    public Map<String,Object> getJobResult(String jobId)
 ```
