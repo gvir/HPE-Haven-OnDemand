@@ -1,5 +1,5 @@
 /**
- * HODClientHTTPClient This class is wrapper on HTTPClient , it contians Business logic for the API
+ * HODClientHTTPClient This class is wrapper on HTTPClient , it contains Business logic for the API
  * 
  * @author Topcoder
  * @version 1.0
@@ -43,27 +43,28 @@ public with sharing class HODClientHTTPClient {
      private static String getQueryStringForParameter(String key, Object value)
      {
      	 String queryParam = '';
-         String vType = GetType(value);
+         String valueType = GetType(value);
          // string type
-         if(vType == HODClientConstants.SALESFORCE_TYPES_STRING_TYPE)
+         if(valueType == HODClientConstants.SALESFORCE_TYPES_STRING_TYPE)
          {
-         	String sValue = (String)value;
-         	if(sValue.length() != 0)
+         	String stringValue = (String)value;
+         	if(stringValue.length() != 0)
          	{
-         		queryParam = key+'='+sValue; 
+         		queryParam = key+'='+stringValue; 
          	}
          }
          // list type
-         else if(vType == HODClientConstants.SALESFORCE_TYPES_LIST_TYPE)
+         else if(valueType == HODClientConstants.SALESFORCE_TYPES_LIST_TYPE)
          {
-         	List<String> lValue = (List<String>)value;
-         	if(lValue.size() != 0)
+         	List<String> listValue = (List<String>)value;
+         	if(listValue.size() != 0)
          	{
-         		for(String item : lValue)
+         		for(String item : listValue)
          		{
-         			queryParam =queryParam + key + '='+item+'&';
+         			queryParam = queryParam + key + '='+item+'&';
          		}
-         		queryParam =queryParam.subString(0, queryParam.length()-1);
+                // removing last dangling character &
+         		queryParam = queryParam.subString(0, queryParam.length()-1);
          	}
          	
          }
@@ -80,7 +81,7 @@ public with sharing class HODClientHTTPClient {
      * Get complete path with query string
      *
      * @param path url for the end point
-     * @param params key, value pair that will be appened in query string
+     * @param params key, value pair that will be appended in query string
      */
      private static String getPathWithQueryParameters(String path, Map<String, Object> params)
      {
@@ -88,10 +89,10 @@ public with sharing class HODClientHTTPClient {
          path = path + '?';
          for(String key : params.keySet())
          {
-             path = path + getQueryStringForParameter(key, params.get(key)) ; 
+             path = path + getQueryStringForParameter(key, params.get(key)); 
              path = path + '&';
          }
-         path = path.substring(0, path.length() -1);
+         path = path.substring(0, path.length()-1);
          return path;
      }
     
@@ -137,7 +138,7 @@ public with sharing class HODClientHTTPClient {
      * @throws HODClientException
      */	
     
-    public static String invokeHODApi(String path, String call, String apiKey, 
+    public static Map<String,Object> invokeHODApi(String path, String call, String apiKey, 
                                       Map<String, Object> params, 
                                       List<Multipart> payLoadData)
     {
@@ -173,10 +174,14 @@ public with sharing class HODClientHTTPClient {
         }
         else
         {
-            //error
-            throw new HODClientException(resp.getBody());
+            Map<String,Object> data = (Map<String,Object>)JSON.deserializeUntyped(resp.getBody());
+            String message = String.valueOf(data.get(HODClientConstants.ERROR_NO))+':'+String.valueOf(data.get(HODClientConstants.ERROR_REASON));
+            //throw error
+            throw new HODClientException(message);
         }
-        return responseBody;
+        
+        
+        return (Map<String,Object>)JSON.deserializeUntyped(responseBody);
         
     }
     
@@ -191,7 +196,7 @@ public with sharing class HODClientHTTPClient {
      * @param params Query String data
      * @throws HODClientException
      */
-    public static String invokeHODApi(String path, String call, String apiKey, 
+    public static Map<String,Object> invokeHODApi(String path, String call, String apiKey, 
                                      Map<String, Object> params)
     {
         return invokeHODApi(path, call, apiKey, 
@@ -209,7 +214,7 @@ public with sharing class HODClientHTTPClient {
      * @param payLoad paylaod for post request
      * @throws HODClientException
      */
-    public static String invokeHODApi(String path, String call, String apiKey, 
+    public static Map<String,Object> invokeHODApi(String path, String call, String apiKey, 
                                      List<Multipart> payLoad)
     {
         return invokeHODApi(path, call, apiKey, 

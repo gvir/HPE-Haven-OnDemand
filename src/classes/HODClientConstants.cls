@@ -40,11 +40,11 @@ global class HODClientConstants {
     public static String ERROR_INPUT_PARAMS = 'Input params can be string or List<String>';
 
 
-    // key file
+    // file key
     public static String FILE_KEY = 'file';
     
     // multi part boundary
-    public static String BOUNDARY_MULTIPART = 'WebKitFormBoundaryrwhfLBSlAAJ9BKQU';
+    public static String BOUNDARY_MULTIPART = 'dshdjshjdhjshd9989rwhfLBSlAAJ9BKQU';
         
     // status code
     public static Integer STATUS_200_OK = 200;
@@ -60,4 +60,9 @@ global class HODClientConstants {
     // error object keys
     public static String ERROR_NO = 'error';
     public static String ERROR_REASON = 'reason';
+    
+    // API response field  constants
+    public static String JOB_ID = 'jobID'; 
+    public static String JOB_RESPONSE_FINISHED = 'finished';
+    public static String JOB_RESPONSE_STATUS = 'status';
 }

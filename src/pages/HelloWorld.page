@@ -1,0 +1,47 @@
+<apex:page showheader="true" sidebar="false" controller="HelloWorldController">
+    <script src="{!URLFOR($Resource.Resource, 'js/jquery-1.7.2.min.js')}" />
+    <script src="{!URLFOR($Resource.Resource, 'bootstrap-3.1.1/js/bootstrap.min.js')}" />
+    <script src="{!URLFOR($Resource.Resource, 'js/script.js')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.Resource, 'bootstrap-3.1.1/css/bootstrap.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.Resource, 'bootstrap-3.1.1/css/bootstrap.min.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.Resource, 'css/style.css')}" />
+	<div class="page-header">
+  		<h1>HPE Haven OnDemand <small>Hello World !!</small></h1>
+	</div>
+    <div class="container">
+        <!--check box area-->
+        <div class="row">
+            <span class="input-group-addon">
+                <input class='call-radio' type="radio" name="call" value='Speech Recognition' checked='true'/> &nbsp; &nbsp; Speech Recognition API
+      		</span>
+            <span class="input-group-addon">
+                <input class='call-radio' type="radio" name="call" value='Text Extraction'/> &nbsp; &nbsp;Text Extraction API
+      		</span>
+        </div>
+        <!--input area-->
+        <div class="row">
+            <div class='info'>
+                Select Office/PDF/Email/Zip file for text extraction.
+            </div>
+            <div class='file-input'>
+                 <input type="file" id="inputFile" class="form-control file" placeholder="Select File"/>
+                 <button class="btn btn-default submit" type="button">Submit</button>
+                
+        		 <image class="loading" src="{!URLFOR($Resource.Resource, 'i/loader.gif')}"></image>
+            </div>
+           
+        </div>
+        <!--status area : shows status of call-->
+        <div class="row show">
+            <div>
+                 <div class="panel panel-default">
+                    <div class="panel-heading">Status</div>
+                    <div class="panel-body message-box">
+                        
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="convertor" class="hide">&lt;&lt;</div>
+</apex:page>

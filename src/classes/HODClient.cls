@@ -6,9 +6,9 @@
  */
 public class HODClient {
    
-    String apiKey = '';
-    String version = '';
-    String url = '';
+    private String apiKey = '';
+    private String version = '';
+    private String url = '';
    
     /**
      * Get URL to call the end point
@@ -17,7 +17,7 @@ public class HODClient {
      * @param version version no 
      * @mode SYNC/ASYNC
      */
-    private static String getUrlString(String hodApp, String version,HODClientConstants.REQ_MODE mode)
+    private static String getUrlString(String hodApp,String version,HODClientConstants.REQ_MODE mode)
     {
     	String callMode = mode.name().toLowerCase();
         return HODClientConstants.HOD_URL+HODClientConstants.HOD_API_URL+'/'+callMode+hodApp+'/'+version;
@@ -26,7 +26,7 @@ public class HODClient {
     /**
      * Get URL to get job status
      */
-    public static String getJobStatusURLString()
+    private static String getJobStatusURLString()
     {
         return  HODClientConstants.HOD_URL+'/'+HODClientConstants.JOB_STATUS;
     }
@@ -34,7 +34,7 @@ public class HODClient {
     /**
      * Get URL to get job result
      */
-    public static STring getJobResultURLString()
+    private static String getJobResultURLString()
     {
         return HODClientConstants.HOD_URL+'/'+HODClientConstants.JOB_RESULT;
     }
@@ -68,10 +68,10 @@ public class HODClient {
      * @param params params to be passed in query string
      * @param hodApp end point to be called
      * @param mode sync/async
-     * @return string response
+     * @return data deserialized response
      * @throws HODClientException 
      */ 
-    public String postRequest(Map<String,Object> params, String hodApp, HODClientConstants.REQ_Mode mode)
+    public Map<String,Object> postRequest(Map<String,Object> params, String hodApp, HODClientConstants.REQ_Mode mode)
     {
         String url = HODClient.GetUrlString(hodApp, this.version, mode);
         
@@ -87,13 +87,12 @@ public class HODClient {
      * @param params params to be passed in post body
      * @param hodApp end point to be called
      * @param mode sync/async
-     * @return string response 
+     * @return data deserialized response
      * @throws HODClientException
      */ 
-    public String postRequestWithAttachment(List<Multipart> params, String hodApp, HODClientConstants.REQ_Mode mode)
+    public Map<String,Object> postRequestWithAttachment(List<Multipart> params, String hodApp, HODClientConstants.REQ_Mode mode)
     {
         String url = HODClient.GetUrlString(hodApp, this.version, mode);
-        System.debug('started');
         return HODClientHTTPClient.invokeHODApi(url, 
                                                 HODClientConstants.POST_REQUEST, 
                                                 this.apiKey,
@@ -105,7 +104,7 @@ public class HODClient {
      * @param jobId id of the job submitted
      * @throws HODClientException
      */
-    public String getJobStatus(String jobId)
+    public Map<String,Object> getJobStatus(String jobId)
     {
       String url = getJobStatusURLString()+ jobId;
       return HODClientHTTPClient.invokeHODApi(url, 
@@ -119,7 +118,7 @@ public class HODClient {
      * @param jobId id of the job submitted
      * @throws HODClientException
      */
-    public String getJobResult(String jobId)
+    public Map<String,Object> getJobResult(String jobId)
     {
       String url = getJobResultURLString()+ jobId;
       return HODClientHTTPClient.invokeHODApi(url, 

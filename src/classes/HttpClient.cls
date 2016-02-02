@@ -10,7 +10,7 @@ public  class HttpClient {
      * calls POST Request
      *
      * @param url Url of the endpoint , it should contain query string
-     * @param payLaod pay load to be transferred in body
+     * @param payLoad pay load to be transferred in body
      * @return HttpResponse response 
      */  
     public static HttpResponse postRequest(String url, String payLoad)
@@ -42,11 +42,8 @@ public  class HttpClient {
         {
             
         	Map<String,String> exceptionData = new Map<String,String>();
-            exceptionData.put(HODClientConstants.ERROR_NO,'');
-            exceptionData.put(HODClientConstants.ERROR_REASON,ex.getMessage());
-            String jsonMessage = JSON.serialize(exceptionData);
             // throw error
-        	throw new HODClientException(jsonMessage);
+        	throw new HODClientException(ex.getMessage());
         }
     }
    

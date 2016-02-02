@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+endpointApiVersion=30.0
+endpointEnvironment=Production/Developer Edition
+endpointServer=www.salesforce.com
+httpsProtocol=true
+ideVersion=30.0
+keependpoint=false
+metadataFormatVersion=30.0
+namespacePrefix=
+packageName=HPE Haven OnDemand
+readTimeout=400
+username=virendergupta88106@gmail.com
