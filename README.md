@@ -128,7 +128,7 @@ try{
       params.add(new Param('service_name','test'));
       params.add(new Param('required_label','test'));
       // call API
-      Map<String,Object> data  client.postRequest(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
+      Map<String,Object> data = client.postRequest(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
       String jobId = data.get(HODClientConstants.JOB_ID);
 }
 catch (HODClientException ex)
@@ -150,7 +150,7 @@ try{
       params.add(new Param('test1.pdf',Blob.toPdf(pdfValue1),'application/pdf'));
       params.add(new Param('test2.pdf',Blob.toPdf(pdfValue2),'application/pdf'));
       // call API
-      Map<String,Object> data  client.postRequest(params, HODAPP.TEXT_EXTRACTION, HODClientConstants.REQ_MODE.ASYNC);
+      Map<String,Object> data =  client.postRequest(params, HODAPP.TEXT_EXTRACTION, HODClientConstants.REQ_MODE.ASYNC);
       String jobId = data.get(HODClientConstants.JOB_ID);
 }
 catch (HODClientException ex)
