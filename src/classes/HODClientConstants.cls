@@ -33,8 +33,8 @@ global class HODClientConstants {
     public enum REQ_MODE{ASYNC , SYNC}
   
     // version
-    public static String DEFAULT_VERSION = 'v2';
-    public static String VERSION_1 = 'v1';
+    public static String DEFAULT_VERSION = 'v1';
+    public static String VERSION_2 = 'v2';
     
     // messages
     public static String ERROR_INPUT_PARAMS = 'Input params can be string or List<String>';

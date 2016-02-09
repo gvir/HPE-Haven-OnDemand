@@ -2,7 +2,7 @@
  * HODClient class to consume HPE Haven OnDemand API
  *
  * @version 1.0
- * @author Topcoder
+
  */
 public class HODClient {
    
@@ -62,35 +62,18 @@ public class HODClient {
         this.version = HODClientConstants.DEFAULT_VERSION;
     }
     
-    /**
-     * calls POST Request
-     *
-     * @param params params to be passed in query string
-     * @param hodApp end point to be called
-     * @param mode sync/async
-     * @return data deserialized response
-     * @throws HODClientException 
-     */ 
-    public Map<String,Object> postRequest(Map<String,Object> params, String hodApp, HODClientConstants.REQ_Mode mode)
-    {
-        String url = HODClient.GetUrlString(hodApp, this.version, mode);
-        
-        return HODClientHTTPClient.invokeHODApi(url, 
-                                                HODClientConstants.POST_REQUEST, 
-                                                this.apiKey,
-                                                params);
-    }
+    
     
     /**
-     * calls POST Request with file attachments
+     * calls POST Request 
      *
-     * @param params params to be passed in post body
+     * @param params params to be passed
      * @param hodApp end point to be called
      * @param mode sync/async
      * @return data deserialized response
      * @throws HODClientException
      */ 
-    public Map<String,Object> postRequestWithAttachment(List<Multipart> params, String hodApp, HODClientConstants.REQ_Mode mode)
+    public Map<String,Object> postRequest(List<Param> params, String hodApp, HODClientConstants.REQ_Mode mode)
     {
         String url = HODClient.GetUrlString(hodApp, this.version, mode);
         return HODClientHTTPClient.invokeHODApi(url, 
@@ -99,6 +82,7 @@ public class HODClient {
                                                 params);
     }
   	
+    
     /**
      * Get status of the job submitted
      * @param jobId id of the job submitted
@@ -110,7 +94,7 @@ public class HODClient {
       return HODClientHTTPClient.invokeHODApi(url, 
                                               HODClientConstants.POST_REQUEST, 
                                               this.apiKey,
-                                              new Map<String,Object>());
+                                              new List<Param>());
     }
     
     /**
@@ -124,7 +108,7 @@ public class HODClient {
       return HODClientHTTPClient.invokeHODApi(url, 
                                               HODClientConstants.POST_REQUEST, 
                                               this.apiKey,
-                                              new Map<String,Object>());
+                                              new List<Param>());
       
     }
 }

@@ -11,7 +11,7 @@
         <members>HODClientTest</members>
         <members>HODClientTestHelper</members>
         <members>HttpClient</members>
-        <members>Multipart</members>
+        <members>Param</members>
         <name>ApexClass</name>
     </types>
     <types>

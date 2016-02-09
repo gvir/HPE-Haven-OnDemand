@@ -81,37 +81,55 @@ public with sharing class HODClientHTTPClient {
      * Get complete path with query string
      *
      * @param path url for the end point
-     * @param params key, value pair that will be appended in query string
+     * @param params list of param 
      */
-     private static String getPathWithQueryParameters(String path, Map<String, Object> params)
+     private static String getPathWithQueryParameters(String path, List<Param>params)
      {
          // there will always be key
          path = path + '?';
-         for(String key : params.keySet())
+         for (Param part : params)
          {
-             path = path + getQueryStringForParameter(key, params.get(key)); 
+             path = path + getQueryStringForParameter(part.getName() , part.getContents()); 
              path = path + '&';
          }
          path = path.substring(0, path.length()-1);
          return path;
      }
     
+    
+    /**
+     * Checks if file type object is passed
+     * @param params to be passed
+     * @return boolean true if exists else false
+     */
+    private static boolean checkIsFileExists(List<Param> params)
+    {
+        boolean isFileExists = false;
+        for (Param part : params) {
+            if(part.isFile())
+            {
+                isFileExists = true;
+            }
+        }
+        return isFileExists;
+    }
+    
     /**
      * Creates pay load string for multipart type
      * 
-     * @param params List of multipart to create the payload
+     * @param params List of Param to create the payload
      * @return payload as string
      */ 
-    private static string getPayLoad(List<Multipart> params)
+    private static string getPayLoad(List<Param> params)
     {
         String body = ''; 
         // add each part
-        for (Multipart part : params) {
+        for (Param part : params) {
             body+= '--' + HODClientConstants.BOUNDARY_MULTIPART + '\r\n';
             if (!part.isFile()) {
                 // if type is not file
                 body+='Content-Disposition: form-data; name="' + part.getName() + '"\r\n\r\n';
-                body+=part.getContents();
+                body+=(String)part.getContents();
             } else {
                 // if it is file type
                 body+='Content-Disposition: form-data; name="'+HODClientConstants.FILE_KEY+'"; filename="' + part.getName() + '"\r\n';
@@ -133,34 +151,25 @@ public with sharing class HODClientHTTPClient {
      * @param path Path for the API, it does not contain query string
      * @param call  POST/GET
      * @param apiKey API Key of the user
-     * @param params Query String data
-     * @param payLoadData pay load data for POST request
+     * @param params data to be passed
      * @throws HODClientException
      */	
     
-    public static Map<String,Object> invokeHODApi(String path, String call, String apiKey, 
-                                      Map<String, Object> params, 
-                                      List<Multipart> payLoadData)
+    public static Map<String,Object> invokeHODApi(String path, String call, String apiKey, List<Param> params)
     {
         HttpResponse resp = null;
+        params.add(new Param(HODClientConstants.API_KEY, apiKey));
         if(call == HODClientConstants.POST_REQUEST)
         {
-            if(payLoadData!= null && payLoadData.size() > 0)
+           
+            if(checkIsFileExists(params))
             {
                 // post with payload
-                // multipart call
-                payLoadData.add(new Multipart(HODClientConstants.API_KEY, apiKey));
-                String load = getPayLoad(payLoadData);
+                String load = getPayLoad(params);
                 resp = HttpClient.postRequest(path,load);
             }
             else
             {
-                // post wth query string
-                
-                if(params == null) {
-                    params = new Map<String, Object>();
-                }
-                params.put(HODClientConstants.API_KEY, apiKey);
                 path = getPathWithQueryParameters(path , params);
                 resp = HttpClient.postRequest(path,'');
             }
@@ -183,42 +192,5 @@ public with sharing class HODClientHTTPClient {
         
         return (Map<String,Object>)JSON.deserializeUntyped(responseBody);
         
-    }
-    
-  
-    /**
-     * Send request to HOD API server
-     * Call appropiate end point  method 
-     * All the calls without payload are passed through this method
-     * @param path Path for the API, it does not contain query string
-     * @param call  POST/GET
-     * @param apiKey API Key of the user
-     * @param params Query String data
-     * @throws HODClientException
-     */
-    public static Map<String,Object> invokeHODApi(String path, String call, String apiKey, 
-                                     Map<String, Object> params)
-    {
-        return invokeHODApi(path, call, apiKey, 
-                                     params, 
-                                     new List<Multipart>());
-    }
-	
-    /**
-     * Send request to HOD API server
-     * Call appropiate end point  method 
-     * All the calls with payload are passed through this method
-     * @param path Path for the API, it does not contain query string
-     * @param call  POST/GET
-     * @param apiKey API Key of the user
-     * @param payLoad paylaod for post request
-     * @throws HODClientException
-     */
-    public static Map<String,Object> invokeHODApi(String path, String call, String apiKey, 
-                                     List<Multipart> payLoad)
-    {
-        return invokeHODApi(path, call, apiKey, 
-                            		 new Map<String, Object>(),
-                                     payLoad);
     }
 }

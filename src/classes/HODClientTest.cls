@@ -34,8 +34,8 @@ public class HODClientTest {
         Test.startTest();
         // with apikey and version
         HODClient client = new HODClient(apiKey, version);
-        Map<String,object> params = new Map<String,Object>(); 
-        params.put('url','https://test.com');
+        List<Param> params = new List<Param>(); 
+        params.add(new Param('url','https://test.com'));
         Map<String,Object> data = client.postRequest(params, HODAPP.SPEECH_RECOGNITION, HODClientConstants.REQ_MODE.ASYNC);
         System.assert(data.get(HODClientConstants.JOB_ID) == '1');
         Test.stopTest();
@@ -52,9 +52,9 @@ public class HODClientTest {
         String version = getAPIVersion();
         Test.startTest();
         HODClient client = new HODClient(apiKey, version);
-        List<Multipart> params = new List<Multipart>(); 
-        params.add(new Multipart('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
-        Map<String,Object> data= client.postRequestWithAttachment(params, HODAPP.TEXT_EXTRACTION, HODClientConstants.REQ_MODE.ASYNC);
+        List<Param> params = new List<Param>();  
+        params.add(new Param('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
+        Map<String,Object> data= client.postRequest(params, HODAPP.TEXT_EXTRACTION, HODClientConstants.REQ_MODE.ASYNC);
         System.assert(data.get(HODClientConstants.JOB_ID) == '2');
         Test.stopTest();
     }
@@ -69,10 +69,10 @@ public class HODClientTest {
         String version = getAPIVersion();
         Test.startTest();
         HODClient client = new HODClient(apiKey, version);
-        List<Multipart> params = new List<Multipart>(); 
-        params.add(new Multipart('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
-        params.add(new Multipart('service_name','test'));
-        Map<String,Object> data = client.postRequestWithAttachment(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
+        List<Param> params = new List<Param>();  
+        params.add(new Param('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
+        params.add(new Param('service_name','test'));
+        Map<String,Object> data = client.postRequest(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
         System.assert(data.get(HODClientConstants.JOB_ID) == '3');
         Test.stopTest();
     }
@@ -87,11 +87,11 @@ public class HODClientTest {
         String version = getAPIVersion();
         Test.startTest();
         HODClient client = new HODClient(apiKey, version);
-        List<Multipart> params = new List<Multipart>(); 
-        params.add(new Multipart('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
-        params.add(new Multipart('service_name','test'));
-        params.add(new Multipart('required_label','test'));
-        Map<String,Object> data= client.postRequestWithAttachment(params, HODAPP.RECOMMEND, HODClientConstants.REQ_MODE.ASYNC);
+        List<Param> params = new List<Param>(); 
+        params.add(new Param('test.csv',Blob.valueOf('test1,test2'),'application/CSV'));
+        params.add(new Param('service_name','test'));
+        params.add(new Param('required_label','test'));
+        Map<String,Object> data= client.postRequest(params, HODAPP.RECOMMEND, HODClientConstants.REQ_MODE.ASYNC);
         System.assert(data.get(HODClientConstants.JOB_ID) == '4');
         Test.stopTest();
     }
@@ -106,10 +106,10 @@ public class HODClientTest {
         String version = getAPIVersion();
         Test.startTest();
         HODClient client = new HODClient(apiKey, version);
-        List<Multipart> params = new List<Multipart>(); 
-        params.add(new Multipart('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
-        params.add(new Multipart('service_name','test'));
-        Map<String,Object> data= client.postRequestWithAttachment(params, HODAPP.TRAIN_PREDICTION, HODClientConstants.REQ_MODE.ASYNC);
+        List<Param> params = new List<Param>(); 
+        params.add(new Param('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
+        params.add(new Param('service_name','test'));
+        Map<String,Object> data= client.postRequest(params, HODAPP.TRAIN_PREDICTION, HODClientConstants.REQ_MODE.ASYNC);
         System.assert(data.get(HODClientConstants.JOB_ID) == '5');
         Test.stopTest();
     }
@@ -125,10 +125,9 @@ public class HODClientTest {
         Test.startTest();
         // create client
         HODClient client = new HODClient(apiKey, version);
-        // create map
-		Map<String,object> params = new Map<String,Object>(); 
+		List<Param> params = new List<Param>(); 
 		// add parameters to be passed
-        params.put('index','test');
+        params.add(new Param('index','test'));
         // get response, it is json response
         Map<String,Object> data = client.postRequest(params, HODAPP.INDEX_STATUS, HODClientConstants.REQ_MODE.SYNC);
         System.assert(data.get('total_documents') == 3);
@@ -148,9 +147,9 @@ public class HODClientTest {
         // create client
         HODClient client = new HODClient(apiKey, version);
         // set params
-		Map<String,object> params = new Map<String,Object>(); 
-        params.put('flavor',new List<String>{'standard','explorer'});
-        params.put('type',new List<String>{'content','connector'});
+		List<Param> params = new List<Param>(); 
+        params.add(new Param('flavor',new List<String>{'standard','explorer'}));
+        params.add(new Param('type',new List<String>{'content','connector'}));
         // get response
         Map<String,Object> data = client.postRequest(params, HODAPP.LIST_RESOURCES, HODClientConstants.REQ_MODE.SYNC);
         System.assert(data.containsKey('private_resources'));
@@ -170,8 +169,8 @@ public class HODClientTest {
         String version = getAPIVersion();
         Test.startTest();
         HODClient client = new HODClient(apiKey, version);
-		Map<String,object> params = new Map<String,Object>(); 
-        params.put('index','test');
+		List<Param> params = new List<Param>(); 
+        params.add(new Param('index','test'));
         try
         {
             Map<String,Object> data= client.postRequest(params, HODAPP.INDEX_STATUS, HODClientConstants.REQ_MODE.SYNC);
