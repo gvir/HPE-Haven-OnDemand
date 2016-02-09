@@ -147,8 +147,8 @@ try{
       HODClient client = new HODClient(apiKey, version);
       // list of Param has to be passed for request with file attachment
       List<Param> params = new List<Param>(); 
-      params.add(new Param('test.pdf',Blob.toPdf(pdfValue1),'application/pdf'));
-      params.add(new Param('test1.pdf',Blob.toPdf(pdfValue2),'application/pdf'));
+      params.add(new Param('test1.pdf',Blob.toPdf(pdfValue1),'application/pdf'));
+      params.add(new Param('test2.pdf',Blob.toPdf(pdfValue2),'application/pdf'));
       // call API
       Map<String,Object> data  client.postRequest(params, HODAPP.TEXT_EXTRACTION, HODClientConstants.REQ_MODE.ASYNC);
       String jobId = data.get(HODClientConstants.JOB_ID);
