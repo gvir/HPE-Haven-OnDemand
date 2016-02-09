@@ -70,7 +70,7 @@ public class HODClientTest {
         Test.startTest();
         HODClient client = new HODClient(apiKey, version);
         List<Param> params = new List<Param>();  
-        params.add(new Param('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
+        params.add(new Param('test.csv',Blob.valueOf('test1,test2'),'application/CSV'));
         params.add(new Param('service_name','test'));
         Map<String,Object> data = client.postRequest(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
         System.assert(data.get(HODClientConstants.JOB_ID) == '3');
