@@ -56,55 +56,112 @@ HODClient client = new HODClient(apiKey);
 ### Sample post sync call (INDEX_STATUS)
 
 ``` Apex
-// create client
-HODClient client = new HODClient(apiKey, version);
-// create map
-Map<String,object> params = new Map<String,Object>(); 
-// add parameters to be passed
-params.put('index','test');
-// get response
-Map<String,Object> response= client.postRequest(params, HODAPP.INDEX_STATUS, HODClientConstants.REQ_MODE.SYNC);
+try
+{
+      // create client
+      HODClient client = new HODClient(apiKey, version);
+      List<Param> params = new List<Param>(); 
+      params.add(new Param('index','test'));
+      // get response
+      Map<String,Object> response= client.postRequest(params, HODAPP.INDEX_STATUS, HODClientConstants.REQ_MODE.SYNC);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
+
 ```
 
 ### Sample post async call (list resources)
 
 ``` Apex
-// create client get job id
-HODClient client = new HODClient(apiKey, version);
-// set params
-Map<String,object> params = new Map<String,Object>(); 
-params.put('flavor',new List<String>{'standard','explorer'});
-params.put('type',new List<String>{'content','connector'});
-// get response
-Map<String,Object> data = client.postRequest(params, HODApp.LIST_RESOURCES, HODClientConstants.REQ_MODE.ASYNC);
-String jobId = data.get(HODClientConstants.JOB_ID);
-
+try{
+      // create client get job id
+      HODClient client = new HODClient(apiKey, version);
+      List<Param> params = new List<Param>(); 
+      params.add(new Param('flavor',new List<String>{'standard','explorer'}));
+      params.add(new Param('type',new List<String>{'content','connector'}));
+      // get response
+      Map<String,Object> data = client.postRequest(params, HODApp.LIST_RESOURCES, HODClientConstants.REQ_MODE.ASYNC);
+      String jobId = data.get(HODClientConstants.JOB_ID);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
 
 // check job status
 // if it is finished then getJobResult method can be used to get jobResult
-Map<String,Object> data = client.getJobStatus(jobID);
-System.assert(data.get(HODClientConstants.JOB_RESPONSE_STATUS) == HODClientConstants.JOB_RESPONSE_FINISHED);
+try{
+      Map<String,Object> data = client.getJobStatus(jobID);
+      System.assert(data.get(HODClientConstants.JOB_RESPONSE_STATUS) == HODClientConstants.JOB_RESPONSE_FINISHED);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
 
 // get job data
-Map<String,Object> data = client.getJobResult(jobID);
+try{
+      Map<String,Object> data = client.getJobResult(jobID);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
+
 
 ```
 
 ### Sample post async call with file attachment (PREDICT API)
 
 ``` Apex
-HODClient client = new HODClient(apiKey, version);
-// list of multipart has to be passed for request with file attachment
-List<Multipart> params = new List<Multipart>(); 
-// add multipart for file type
-params.add(new Multipart('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
-// add multipart for other param
-params.add(new Multipart('service_name','test'));
-// call API
-Map<String,Object> data  client.postRequestWithAttachment(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
-String jobId = data.get(HODClientConstants.JOB_ID);
+try{
+      HODClient client = new HODClient(apiKey, version);
+      // list of Param has to be passed for request with file attachment
+      List<Param> params = new List<Param>(); 
+      params.add(new Param('test.csv',Blob.valueOf(csvString),'application/CSV'));
+      params.add(new Param('service_name','test'));
+      params.add(new Param('required_label','test'));
+      // call API
+      Map<String,Object> data  client.postRequest(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
+      String jobId = data.get(HODClientConstants.JOB_ID);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
+
 
 ```
+
+### Sample post async call with multiple file attachments (Text Extraction API)
+
+``` Apex
+try{
+      HODClient client = new HODClient(apiKey, version);
+      // list of Param has to be passed for request with file attachment
+      List<Param> params = new List<Param>(); 
+      params.add(new Param('test.pdf',Blob.toPdf(pdfValue1),'application/pdf'));
+      params.add(new Param('test1.pdf',Blob.toPdf(pdfValue2),'application/pdf'));
+      // call API
+      Map<String,Object> data  client.postRequest(params, HODAPP.TEXT_EXTRACTION, HODClientConstants.REQ_MODE.ASYNC);
+      String jobId = data.get(HODClientConstants.JOB_ID);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
+
+
+```
+
 
 ### Error Handling
 
