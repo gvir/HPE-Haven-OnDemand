@@ -161,6 +161,77 @@ catch (HODClientException ex)
 
 
 ```
+### Sample get sync call (Delete Index API)
+
+``` Apex
+try{
+      HODClient client = new HODClient(apiKey, version);
+      // list of Param has to be passed for request with file attachment
+      List<Param> params = new List<Param>(); 
+      params.add(new Param('index',indexName));
+      // get response
+      Map<String,Object> data = client.getRequest(params, HODAPP.DELETE_TEXT_INDEX, HODClientConstants.REQ_MODE.SYNC);
+      // get confirm
+      String confirm = (String)data.get('confirm');
+      
+      // delete index with confirm
+      List<Param> newParams = new List<Param>();
+      newParams.add(new Param('index',indexName));
+      newParams.add(new Param('confirm',confirm));
+      Map<String,Object> deleteData = hodClient.getRequest(newParams, HODApp.DELETE_TEXT_INDEX,HODClientConstants.REQ_Mode.SYNC);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
+
+
+```
+
+### Sample get async call (create index)
+
+``` Apex
+try{
+      // create client get job id
+      HODClient client = new HODClient(apiKey, version);
+      List<Param> params = new List<Param>(); 
+      List<Param> params = new List<Param>();   
+      params.add(new Param('index',indexName));
+      params.add(new Param('flavor','explorer'));
+      Map<String,Object> data = hodClient.getRequest(params, HODApp.CREATE_TEXT_INDEX,HODClientConstants.REQ_Mode.ASYNC)
+      String jobId = data.get(HODClientConstants.JOB_ID);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
+
+// check job status
+// if it is finished then getJobResult method can be used to get jobResult
+try{
+      Map<String,Object> data = client.getJobStatus(jobID);
+      System.assert(data.get(HODClientConstants.JOB_RESPONSE_STATUS) == HODClientConstants.JOB_RESPONSE_FINISHED);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
+
+// get job data
+try{
+      Map<String,Object> data = client.getJobResult(jobID);
+}
+catch (HODClientException ex)
+{
+     String message = ex.getMessage();
+     System.debug(message);
+}
+
+
+```
 
 
 ### Error Handling
