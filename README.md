@@ -26,7 +26,7 @@ For a full list of all the APIs and to try them out, check out [https://www.have
 
 ### Using Unmanaged package
 
-- Login in the Salesforce account and install [package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t280000006brG).
+- Login in the Salesforce account and install [package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t28000000AzfM).
 
 ### Using ANT
 
@@ -166,7 +166,6 @@ catch (HODClientException ex)
 ``` Apex
 try{
       HODClient client = new HODClient(apiKey, version);
-      // list of Param has to be passed for request with file attachment
       List<Param> params = new List<Param>(); 
       params.add(new Param('index',indexName));
       // get response
@@ -178,6 +177,7 @@ try{
       List<Param> newParams = new List<Param>();
       newParams.add(new Param('index',indexName));
       newParams.add(new Param('confirm',confirm));
+      // index will be deleted
       Map<String,Object> deleteData = hodClient.getRequest(newParams, HODApp.DELETE_TEXT_INDEX,HODClientConstants.REQ_Mode.SYNC);
 }
 catch (HODClientException ex)
@@ -195,7 +195,6 @@ catch (HODClientException ex)
 try{
       // create client get job id
       HODClient client = new HODClient(apiKey, version);
-      List<Param> params = new List<Param>(); 
       List<Param> params = new List<Param>();   
       params.add(new Param('index',indexName));
       params.add(new Param('flavor','explorer'));
