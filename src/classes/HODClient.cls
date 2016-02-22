@@ -1,7 +1,9 @@
 /**
  * HODClient class to consume HPE Haven OnDemand API
+ * 1.1 : Added getRequest method
  *
- * @version 1.0
+ * @version 1.1
+ * @author: Topcoder
 
  */
 public class HODClient {
@@ -78,6 +80,26 @@ public class HODClient {
         String url = HODClient.GetUrlString(hodApp, this.version, mode);
         return HODClientHTTPClient.invokeHODApi(url, 
                                                 HODClientConstants.POST_REQUEST, 
+                                                this.apiKey,
+                                                params);
+    }
+
+    
+    
+    /**
+     * calls GET Request 
+     *
+     * @param params params to be passed
+     * @param hodApp end point to be called
+     * @param mode sync/async
+     * @return data deserialized response
+     * @throws HODClientException
+     */ 
+    public Map<String,Object> getRequest(List<Param> params, String hodApp, HODClientConstants.REQ_Mode mode)
+    {
+        String url = HODClient.GetUrlString(hodApp, this.version, mode);
+        return HODClientHTTPClient.invokeHODApi(url, 
+                                                HODClientConstants.GET_REQUEST, 
                                                 this.apiKey,
                                                 params);
     }

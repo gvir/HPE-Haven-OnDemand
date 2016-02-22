@@ -1,8 +1,10 @@
 /**
  * Test HODClient class
+ * 1.1 : Added New test cases for GET requests
  * 
  * @author Topcoder
- * @version 1.0
+ * @version 1.1
+ * 
  */
 @isTest
 public class HODClientTest {
@@ -70,7 +72,7 @@ public class HODClientTest {
         Test.startTest();
         HODClient client = new HODClient(apiKey, version);
         List<Param> params = new List<Param>();  
-        params.add(new Param('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
+        params.add(new Param('test.csv',Blob.valueOf('test1,test2'),'application/CSV'));
         params.add(new Param('service_name','test'));
         Map<String,Object> data = client.postRequest(params, HODAPP.PREDICT, HODClientConstants.REQ_MODE.ASYNC);
         System.assert(data.get(HODClientConstants.JOB_ID) == '3');
@@ -107,7 +109,7 @@ public class HODClientTest {
         Test.startTest();
         HODClient client = new HODClient(apiKey, version);
         List<Param> params = new List<Param>(); 
-        params.add(new Param('test.pdf',Blob.toPdf('sample value'),'application/pdf'));
+        params.add(new Param('test.csv',Blob.valueOf('test1,test2'),'application/CSV'));
         params.add(new Param('service_name','test'));
         Map<String,Object> data= client.postRequest(params, HODAPP.TRAIN_PREDICTION, HODClientConstants.REQ_MODE.ASYNC);
         System.assert(data.get(HODClientConstants.JOB_ID) == '5');
@@ -275,7 +277,96 @@ public class HODClientTest {
         Test.stopTest();
     }
     
-  
+    
+    /**
+     *  Create Index GET request Async
+     */
+    @isTest
+    private static void testCreateIndexGETAsync() {
+        testSetup(true);
+        String apiKey = getAPIKeyForTest();
+        Test.startTest();
+        HODClient client = new HODClient(apiKey);
+        List<Param> params = new List<Param>(); 
+        params.add(new Param('index','test'));
+        params.add(new Param('flavor','explorer'));
+        // get response
+        Map<String,Object> data = client.getRequest(params, HODAPP.CREATE_TEXT_INDEX, HODClientConstants.REQ_MODE.ASYNC);
+        System.assert(data.get(HODClientConstants.JOB_ID) == '6');
+        Test.stopTest();
+    }
+
+    
+    /**
+     *  Get Index GET request Response
+     */
+    @isTest
+    private static void testCreateIndexGETAsyncResponse() {
+        testSetup(true);
+        String apiKey = getAPIKeyForTest();
+        Test.startTest();
+        HODClient client = new HODClient(apiKey);
+        Map<String,Object> data= client.getJobResult('6');
+        System.assert(data.get('message') == 'index created');
+        Test.stopTest();
+    }
+    
+
+    /**
+     *  Delete Index GET Sync without confirm
+     */
+    @isTest
+    private static void testDeleteIndexGETSync() {
+        testSetup(true);
+        String apiKey = getAPIKeyForTest();
+        Test.startTest();
+        HODClient client = new HODClient(apiKey);
+        List<Param> params = new List<Param>(); 
+        params.add(new Param('index','test'));
+        // get response
+        Map<String,Object> data = client.getRequest(params, HODAPP.DELETE_TEXT_INDEX, HODClientConstants.REQ_MODE.SYNC);
+        System.assert(data.get('confirm') == '1455948642:b09894dd5e1668434f1ff55fb57df2ab');
+        Test.stopTest();
+    }
+    
+    
+    /**
+     *  Delete Index GET Sync with confirm
+     */
+    @isTest
+    private static void testDeleteIndexWithConfirmGETSync() {
+        testSetup(true);
+        String apiKey = getAPIKeyForTest();
+        Test.startTest();
+        HODClient client = new HODClient(apiKey);
+        List<Param> params = new List<Param>(); 
+        params.add(new Param('index','test'));
+        params.add(new Param('confirm','1455948642:b09894dd5e1668434f1ff55fb57df2ab'));
+        // get response
+        Map<String,Object> data = client.getRequest(params, HODAPP.DELETE_TEXT_INDEX, HODClientConstants.REQ_MODE.SYNC);
+        System.assert(data.get('deleted') == true);
+        Test.stopTest();
+    }
+    
+    
+    /**
+     *  Index Status GET Sync 
+     */
+    @isTest
+    private static void testIndexStatusGETSync() {
+        testSetup(true);
+        String apiKey = getAPIKeyForTest();
+        Test.startTest();
+        HODClient client = new HODClient(apiKey);
+        List<Param> params = new List<Param>(); 
+        params.add(new Param('index','test'));
+        // get response
+        Map<String,Object> data = client.getRequest(params, HODAPP.INDEX_STATUS, HODClientConstants.REQ_MODE.SYNC);
+        System.assert(data.get('total_documents') == 3);
+        Test.stopTest();
+    }
+    
+    
     
     // sets the mock service
     // if false : then error mock service is binded

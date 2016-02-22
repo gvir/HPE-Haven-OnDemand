@@ -1,8 +1,9 @@
 /**
  * HODClientHTTPClient This class is wrapper on HTTPClient , it contains Business logic for the API
+ * 1.1 : Added Get request section in invokeHODAPI
  * 
  * @author Topcoder
- * @version 1.0
+ * @version 1.1
  * 
  */
 public with sharing class HODClientHTTPClient {
@@ -161,7 +162,7 @@ public with sharing class HODClientHTTPClient {
         params.add(new Param(HODClientConstants.API_KEY, apiKey));
         if(call == HODClientConstants.POST_REQUEST)
         {
-           
+            // POST request
             if(checkIsFileExists(params))
             {
                 // post with payload
@@ -174,6 +175,13 @@ public with sharing class HODClientHTTPClient {
                 resp = HttpClient.postRequest(path,'');
             }
         }
+        else if(call == HODClientConstants.GET_REQUEST)
+        {
+             // GET Request
+			 path = getPathWithQueryParameters(path , params);
+             resp = HttpClient.getRequest(path);            
+        }
+        
         String responseBody  = '';
         // check for response status
         if(resp.getStatusCode() == HODClientConstants.STATUS_200_OK)
@@ -188,8 +196,6 @@ public with sharing class HODClientHTTPClient {
             //throw error
             throw new HODClientException(message);
         }
-        
-        
         return (Map<String,Object>)JSON.deserializeUntyped(responseBody);
         
     }

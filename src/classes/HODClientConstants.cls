@@ -1,6 +1,7 @@
 /* @class Constants Contains constants used in the Library
+ * 1.1 : Added API Request Parameter section 
  *
- * @version 1.0
+ * @version 1.1
  * @author Topcoder
  */
 global class HODClientConstants {
@@ -65,4 +66,7 @@ global class HODClientConstants {
     public static String JOB_ID = 'jobID'; 
     public static String JOB_RESPONSE_FINISHED = 'finished';
     public static String JOB_RESPONSE_STATUS = 'status';
+    
+    // API Request parameters
+    public static String CONFIRM = 'confirm';
 }

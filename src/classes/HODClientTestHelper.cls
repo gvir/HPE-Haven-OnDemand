@@ -1,7 +1,8 @@
 /**
  * Helper methods for HODClientTest cases 
+ * 1.1 :  Added mock responses for GET request end points
  * 
- * @version 1.0
+ * @version 1.1
  * @author Topcoder
  */
  
@@ -38,6 +39,10 @@ public class HODClientTestHelper {
                 // train prediction async
                 res.setBody('{"jobID":"5"}');
             }
+            else if (req.getEndpoint().contains(HODApp.CREATE_TEXT_INDEX)) {
+                // create index
+                res.setBody('{"jobID":"6"}');
+            }
             else if (req.getEndpoint().contains(HODApp.INDEX_STATUS)) {
                 // index status sync
                 res.setBody(responseIndexStatus);
@@ -46,6 +51,14 @@ public class HODClientTestHelper {
                 // list resources
                 res.setBody(responseListResources);
             }
+            else if (req.getEndpoint().contains(HODApp.DELETE_TEXT_INDEX) && req.getEndpoint().contains(HODClientConstants.CONFIRM)) {
+                // delete resources with out confirm
+                res.setBody(responseDelteResourcesWithConfirm);
+            } 
+            else if (req.getEndpoint().contains(HODApp.DELETE_TEXT_INDEX)) {
+                // delete resources with out confirm
+                res.setBody(responseDeleteResourcesWithoutConfirm);
+            } 
             else if (req.getEndpoint().contains(HODClientConstants.JOB_STATUS)) {
                 // call job status
                 res.setBody(responseStatus);
@@ -88,7 +101,10 @@ public class HODClientTestHelper {
     public static final String responseStatus = '{"status":"finished"}';
     public static final String responseIndexStatus = '{"total_documents": 3,"total_index_size": 1335,"24hr_index_updates": 0,"component_count": 1}';
     public static final String responseListResources = '{"public_resources":[],"private_resources":[{"resource":"test","type":"content","flavor":"standard","description":null,"date_created":"Fri Jan 08 2016 10:32:46 GMT+0000 (UTC)","display_name":null,"resourceUUID":"7b40cca0-bca7-4976-ad5c-1c4ab5313adb"}]}';
-    
+    public static final String responseDeleteResourcesWithoutConfirm = '{"deleted": false,"confirm": "1455948642:b09894dd5e1668434f1ff55fb57df2ab"}';
+    public static final String responseDelteResourcesWithConfirm = '{"deleted": true,"index": "test"}';
+    public static final String responseCreateResources = '{"message": "index created","index": "test"}';
+   
     // error response
     public static final String responseFailure = '{"error": 4004,"reason": "Invalid job action","detail": { "message": "API not found"}}';
     
@@ -100,7 +116,8 @@ public class HODClientTestHelper {
         '2'=>responseTextExtraction,
         '3'=>responsePredict,
         '4'=>responseRecomendation,
-        '5'=>responseTrainPrediction
+        '5'=>responseTrainPrediction,
+        '6'=>responseCreateResources
      };
   	
          

@@ -1,8 +1,9 @@
 /**
  * generic HTTP client to send HTTP request to the endpoint
  * and receive HTTP response from the endpoint
+ * 1.1 : Added GET request 
  *
- * @version 1.0
+ * @version 1.1
  * @author Topcoder
  */
 public  class HttpClient {    
@@ -35,8 +36,7 @@ public  class HttpClient {
             	req.setHeader('Accept', 'application/json');
             	req.setHeader('Content-Type', 'application/json');
         	}
-        	HttpResponse resp = h.send(req);
-			return resp;
+        	return sendRequest(req);
         }
         catch(Exception ex)
         {
@@ -47,4 +47,52 @@ public  class HttpClient {
         }
     }
    
+    
+     /**
+     * calls GET Request
+     *
+     * @param url Url of the endpoint , it should contain query string
+     * @return HttpResponse response 
+     */  
+    public static HttpResponse getRequest(String url)
+    {
+        try
+        {
+            HttpRequest req = new HttpRequest();
+    		req.setEndpoint(url);
+        	req.setTimeout(HODClientConstants.TIME_OUT);
+        	req.setMethod(HODClientConstants.GET_REQUEST);
+           	req.setHeader('Accept', 'application/json');
+           	req.setHeader('Content-Type', 'application/json');
+        	return sendRequest(req);
+        }
+        catch(Exception ex)
+        {
+            
+        	Map<String,String> exceptionData = new Map<String,String>();
+            // throw error
+        	throw new HODClientException(ex.getMessage());
+        }
+    }
+    
+    
+    /**
+     * send Request
+     *
+     * @param req HttpRequest
+     * @return HttpResponse response 
+     */  
+    public static HttpResponse sendRequest(HttpRequest req)
+    {
+        try
+        {
+            Http h = new Http();
+        	return h.send(req);
+        }
+        catch(Exception ex)
+        {
+            throw ex;
+        }
+    }
+    
 }
